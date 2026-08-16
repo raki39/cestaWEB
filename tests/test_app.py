@@ -58,13 +58,13 @@ async def _validar_recusa(ticket):
 async def _enviar_ok(**kw):
     enviados.append(kw)
     return {"cesta_id": 12, "total_itens": len(kw["itens"]),
-            "duplicada": False, "casamento": {"status": "pendente"}}
+            "duplicada": False}
 
 
 async def _enviar_duplicada(**kw):
     enviados.append(kw)
     return {"cesta_id": 7, "total_itens": len(kw["itens"]),
-            "duplicada": True, "casamento": {"status": "pendente"}}
+            "duplicada": True}
 
 
 async def _enviar_erro(**kw):

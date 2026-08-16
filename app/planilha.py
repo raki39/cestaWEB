@@ -37,7 +37,7 @@ from typing import Any, Dict, List, Optional, Tuple
 logger = logging.getLogger(__name__)
 
 # ── Limites ─────────────────────────────────────────────────────────────────────
-# Itens por cesta. Protege o parser, a tela de cestas e o casamento em lote. NÃO é
+# Itens por cesta. Protege o parser e a tela de cestas do OCTO. NÃO é
 # o mesmo teto que limita a SIMULAÇÃO (esse é o TOP N, decidido dentro do OCTO, e
 # é bem menor: a execução dispara consultas por produto).
 MAX_ITENS = 5_000

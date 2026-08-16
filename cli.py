@@ -133,7 +133,6 @@ def cmd_enviar(args) -> int:
     print(f"  cesta_id    : {r.get('cesta_id')}")
     print(f"  total_itens : {r.get('total_itens')}")
     print(f"  duplicada   : {r.get('duplicada')}")
-    print(f"  casamento   : {(r.get('casamento') or {}).get('status')}")
     _linha("=")
     return 0
 

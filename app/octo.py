@@ -152,7 +152,7 @@ async def enviar_cesta(
     idempotency_key: str,
     bandeira: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Grava a cesta no OCTO. Devolve `{cesta_id, total_itens, duplicada, casamento}`.
+    """Grava a cesta no OCTO. Devolve `{cesta_id, total_itens, duplicada}`.
 
     O `empresa_id`/dono NÃO vai no corpo: quem decide é o grant, do lado do OCTO.
     Mandar daqui seria deixar o app de fora escolher em nome de quem grava.

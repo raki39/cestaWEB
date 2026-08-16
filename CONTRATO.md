@@ -199,8 +199,7 @@ Grava a cesta. Este é o payload golden.
 {
   "cesta_id": 12,
   "total_itens": 2,
-  "duplicada": false,
-  "casamento": { "status": "pendente" }
+  "duplicada": false
 }
 ```
 
@@ -226,16 +225,24 @@ outra**: responde `200` com `duplicada: true` e o `cesta_id` da que já existe.
 Sem isso, duplo clique e retry produzem cestas idênticas no seletor — e isso
 acontece na primeira demonstração.
 
-#### O casamento não acontece aqui
+#### Ninguém casa nada com a base neste fluxo
 
-A resposta sai com `casamento.status = "pendente"`. O OCTO resolve a descrição do
-cliente contra a base **depois**, em background, porque:
+A cesta é **dado de metadados**: uma lista de descrições e preços, gravada no
+Postgres do OCTO. É exatamente o que as cestas antigas de `simulation_source.py`
+já eram — listas de nome de produto — só que agora em tabela em vez de literal
+Python.
 
-- é ele que tem o ClickHouse (o `cestaWEB` **nunca** vê a base de mercado);
-- o upload não deve ficar pendurado esperando consulta analítica.
+Resolver `descricao_cliente` contra a base de mercado é trabalho do **nó da
+simulação**, na execução, com a conexão que o grafo já tem (`descricao_produto =
+'NM_PRODUTO'` exato, com fallback `ILIKE`). Nem o `cestaWEB` nem a API do OCTO
+abrem o banco de dados do cliente para isso:
 
-O `cestaWEB` não consulta o resultado do casamento — quem mostra isso é a tela de
-cestas dentro do OCTO. O app de upload termina o trabalho no `201`.
+- o `cestaWEB` não tem acesso nenhum à base de mercado;
+- a API do OCTO trata metadados, não dado de cliente;
+- e duplicar aquela resolução criaria uma **segunda verdade** sobre o que casou,
+  que um dia discordaria do relatório.
+
+Por isso a resposta do `POST /cestas` não fala de casamento. Gravou, acabou.
 
 ### 4. `GET /cestas/config` — chamado pelo **front do OCTO**
 
