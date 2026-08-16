@@ -1,0 +1,24 @@
+# segredos
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# planilhas de cliente NUNCA entram no repo (dado de terceiro)
+*.xlsx
+*.xlsm
+*.xls
+*.csv
+!app/static/modelo-*.xlsx
+
+# editor / SO
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

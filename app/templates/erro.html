@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+
+{% block conteudo %}
+  <h1>{{ titulo }}</h1>
+  <div class="erro">{{ mensagem }}</div>
+
+  {% if oferecer_voltar %}
+    <div class="card destaque">
+      <h2>O que fazer</h2>
+      <p>
+        Volte ao OCTO e clique no botão de cestas novamente. O link de acesso vale
+        por poucos minutos e só pode ser usado uma vez — é assim de propósito.
+      </p>
+      <div class="acoes">
+        {% if octo_front %}<a class="botao" href="{{ octo_front }}">Ir para o OCTO</a>{% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

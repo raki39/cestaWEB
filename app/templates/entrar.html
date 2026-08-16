@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block titulo %}Acesso pelo OCTO{% endblock %}
+
+{% block conteudo %}
+  <h1>Entre pelo OCTO</h1>
+  <p class="lead">
+    Esta página é aberta a partir do OCTO. Não há senha aqui: quem confirma quem
+    você é, é o próprio OCTO, onde você já está logado.
+  </p>
+
+  <div class="card destaque">
+    <h2>Como chegar aqui</h2>
+    <p>
+      No OCTO, abra o tema <strong>Simulação de Tabloide</strong> e clique em
+      <strong>enviar cesta</strong>. O botão abre esta página já com o seu acesso.
+    </p>
+    {% if octo_front %}
+      <div class="acoes"><a class="botao" href="{{ octo_front }}">Ir para o OCTO</a></div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Se você já clicou no botão</h2>
+    <p>
+      O link de acesso vale por poucos minutos e só pode ser usado uma vez. Se você
+      recarregou a página, voltou no histórico ou o link ficou aberto muito tempo,
+      é só clicar no botão no OCTO outra vez.
+    </p>
+  </div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{# O título acompanha o caso: no envio duplicado nada foi criado, e a aba do
+   navegador não pode afirmar o contrário. #}
+{% block titulo %}{{ 'Cesta já existente' if resposta.duplicada else 'Cesta enviada' }}{% endblock %}
+
+{% block conteudo %}
+  {% if resposta.duplicada %}
+    <h1>Essa cesta já estava aqui</h1>
+    <div class="ok">
+      Essa planilha já havia sido enviada, então não criei uma cesta repetida.
+      A cesta existente continua disponível no OCTO
+      (nº <strong>{{ resposta.cesta_id }}</strong>).
+    </div>
+  {% else %}
+    <h1>Cesta enviada</h1>
+    <div class="ok">
+      Pronto. A cesta nº <strong>{{ resposta.cesta_id }}</strong> já está no OCTO com
+      <strong>{{ resposta.total_itens }}</strong>
+      {{ 'item' if resposta.total_itens == 1 else 'itens' }}.
+    </div>
+  {% endif %}
+
+  <div class="card">
+    <h2>O que eu li da sua planilha</h2>
+    <div class="rolagem">
+      <table>
+        <tbody>
+          <tr><th>Arquivo</th><td>{{ resumo.arquivo }}</td></tr>
+          <tr><th>Itens na cesta</th><td class="num">{{ resumo.itens }}</td></tr>
+          <tr><th>Com código de barras</th><td class="num">{{ resumo.com_ean }}</td></tr>
+          <tr><th>Com marca</th><td class="num">{{ resumo.com_marca }}</td></tr>
+          {% if resumo.linhas_descartadas %}
+            <tr><th>Linhas de fora</th><td class="num">{{ resumo.linhas_descartadas }}</td></tr>
+          {% endif %}
+          {% if resumo.linhas_repetidas %}
+            <tr><th>Linhas repetidas</th><td class="num">{{ resumo.linhas_repetidas }}</td></tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% if avisos %}
+    <div class="aviso">
+      <strong>Coisas que vale você saber</strong>
+      <ul>
+        {% for a in avisos %}<li>{{ a }}</li>{% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <div class="card destaque">
+    <h2>Próximo passo, no OCTO</h2>
+    <p>
+      Abra o tema <strong>Simulação de Tabloide</strong> e escolha esta cesta no
+      seletor. O casamento dos produtos com a base de mercado roda em segundo
+      plano — é na tela de cestas do OCTO que você vê quantos itens casaram e
+      ajusta os que não casaram.
+    </p>
+    <div class="acoes">
+      {% if octo_front %}<a class="botao" href="{{ octo_front }}">Ir para o OCTO</a>{% endif %}
+      <a class="botao leve" href="/">Enviar outra cesta</a>
+    </div>
+  </div>
+{% endblock %}

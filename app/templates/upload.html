@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block titulo %}Enviar cesta{% endblock %}
+
+{% block conteudo %}
+  <h1>Enviar uma cesta</h1>
+  <p class="lead">
+    Envie a planilha com os produtos do seu tabloide. Ela vira uma cesta que você
+    escolhe dentro do OCTO, no tema <strong>Simulação de Tabloide</strong>.
+  </p>
+
+  {% if erro %}
+    <div class="erro"><strong>Não deu para enviar.</strong><br>{{ erro }}</div>
+  {% endif %}
+
+  {% if resumo %}
+    <div class="aviso">
+      A planilha foi lida ({{ resumo.itens }} itens), mas o envio ao OCTO falhou.
+      O problema não é a sua planilha — pode tentar enviar de novo.
+    </div>
+  {% endif %}
+
+  <div class="card destaque">
+    <h2>1. Baixe o modelo</h2>
+    <p>
+      O modelo já tem as colunas certas e a coluna de código de barras formatada
+      como texto — não mude isso, é o que impede o Excel de estragar o EAN.
+    </p>
+    <a class="botao leve" href="/modelo.xlsx" download>Baixar modelo (.xlsx)</a>
+  </div>
+
+  <div class="card">
+    <h2>2. Envie preenchido</h2>
+    <form method="post" action="/enviar" enctype="multipart/form-data"
+          onsubmit="this.querySelector('button').disabled=true;
+                    this.querySelector('button').textContent='Enviando…';">
+      <div class="campo">
+        <label for="arquivo">Planilha da cesta</label>
+        <input id="arquivo" type="file" name="arquivo" accept=".xlsx,.xlsm" required>
+        <p class="dica">
+          Somente <code>.xlsx</code>. Obrigatório: <code>descricao</code> e
+          <code>preco</code>. Até {{ limite_itens }} itens por cesta. A ordem das
+          linhas é a ordem do seu tabloide.
+        </p>
+      </div>
+
+      <div class="campo">
+        <label for="nome">Nome da cesta <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+        <input id="nome" type="text" name="nome" maxlength="200"
+               placeholder="Ex.: Tabloide Setembro">
+        <p class="dica">É o nome que vai aparecer no seletor dentro do OCTO. Em branco, uso o nome do arquivo.</p>
+      </div>
+
+      <div class="campo">
+        <label for="bandeira">Bandeira <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+        <input id="bandeira" type="text" name="bandeira" maxlength="200"
+               placeholder="Ex.: ASSAI ATAC">
+        <p class="dica">A bandeira do tabloide. Serve para o relatório saber de quem é a cesta.</p>
+      </div>
+
+      <div class="acoes">
+        <button type="submit">Enviar cesta</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>O que acontece depois</h2>
+    <p>
+      Ao enviar, a cesta já fica disponível no OCTO. O casamento dos produtos com
+      a base de mercado roda em seguida — você vê quantos itens casaram na tela de
+      cestas, dentro do OCTO.
+    </p>
+    <p class="dica" style="margin:0">
+      Enviar a mesma planilha duas vezes não cria cesta repetida.
+    </p>
+  </div>
+{% endblock %}

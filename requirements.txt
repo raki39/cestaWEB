@@ -1,0 +1,13 @@
+# cestaWEB — dependências
+#
+# Lista curta de propósito. Este app faz três coisas: falar HTTP com o OCTO, abrir
+# planilha e renderizar três telas. Não tem ORM, não tem driver de banco e não tem
+# cliente de ClickHouse — se algum aparecer aqui, a fronteira com o OCTO furou.
+
+fastapi==0.115.5
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9      # upload multipart
+jinja2==3.1.4                # as três telas
+itsdangerous==2.2.0          # assina o cookie de sessão (SessionMiddleware)
+httpx==0.27.2                # cliente do OCTO
+openpyxl==3.1.5              # o trabalho pesado: abrir o .xlsx
