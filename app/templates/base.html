@@ -6,93 +6,180 @@
   <meta name="robots" content="noindex, nofollow">
   <title>{% block titulo %}Cestas{% endblock %} · OCTO</title>
   <style>
-    /* Paleta de "livro-caixa": o assunto é uma planilha virando dado. Verde de
-       razão contábil, ferrugem para aviso. Sem CDN — o app precisa subir num
-       ambiente que pode não ter saída para a internet. */
+    /* ─────────────────────────────────────────────────────────────────────────
+       Paleta do OCTO, transposta para CSS puro.
+
+       Este app abre numa aba nova a partir do OCTO. Quando ele tinha identidade
+       própria (verde de livro-caixa), a troca de aba parecia troca de PRODUTO —
+       e num fluxo em que o usuário sai, envia a planilha e volta, isso é motivo
+       para desconfiar de onde se está enviando dado.
+
+       Os valores vêm de `infopriceFRONT/frontend/components/skills/skillTheme.ts`
+       e das classes Tailwind que o chat usa. Não há Tailwind aqui (nem CDN: o
+       app precisa subir num ambiente que pode não ter saída para a internet),
+       então os tons estão escritos à mão — com o nome do token do lado, que é o
+       que permite conferir se os dois lados continuam iguais.
+
+       ⚠️ Os NOMES das classes não mudaram. Os outros templates dependem deles.
+       ───────────────────────────────────────────────────────────────────────── */
     :root {
-      --paper: #F4F4F0; --card: #FFF; --ink: #1B1D1A; --muted: #63665E;
-      --rule: #DDDDD4; --rule-2: #EAEAE3;
-      --accent: #2D5D4B; --accent-w: #E4EFE8;
-      --flag: #A34426;  --flag-w: #F6E7E0;
-      --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --paper:   #F8FAFC;              /* slate-50  — fundo da página */
+      --card:    #FFFFFF;              /* branco    — superfície */
+      --sunken:  #F8FAFC;              /* slate-50  — um degrau mais fundo */
+      --ink:     #0F172A;              /* slate-900 — texto de leitura */
+      --muted:   #475569;              /* slate-600 — texto secundário */
+      --faint:   #94A3B8;              /* slate-400 — legendas */
+      --rule:    #E2E8F0;              /* slate-200 — borda padrão */
+      --rule-2:  #F1F5F9;              /* slate-100 — preenchimento sutil */
+
+      /* Indigo só em ícone/detalhe e link, como no chat: cor não entra em texto
+         de leitura. A ação primária é slate-900, não indigo — é o `actionPrimary`
+         do `skillTheme`. */
+      --accent:   #6366F1;             /* indigo-500 */
+      --accent-w: #EEF2FF;             /* indigo-50  */
+      --acao:     #0F172A;             /* slate-900  — botão primário */
+      --acao-h:   #1E293B;             /* slate-800  — hover */
+      --acao-ink: #FFFFFF;
+
+      --ok:      #047857;              /* emerald-700 */
+      --ok-w:    #ECFDF5;              /* emerald-50  */
+      --flag:    #B91C1C;              /* red-700 */
+      --flag-w:  #FEF2F2;              /* red-50  */
+
+      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+              "Helvetica Neue", Arial, sans-serif;
       --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+      --r-card: .75rem;                /* rounded-xl, como os cards do chat */
+      --r-ctrl: .5rem;                 /* rounded-lg, como os controles */
     }
+
     @media (prefers-color-scheme: dark) {
       :root {
-        --paper: #141614; --card: #1B1E1B; --ink: #E8E9E4; --muted: #9AA095;
-        --rule: #2F332E; --rule-2: #242824;
-        --accent: #7CC6A3; --accent-w: #1E2C26;
-        --flag: #E09070;  --flag-w: #2E211B;
+        --paper:   #020617;            /* slate-950 — o fundo do chat */
+        --card:    #0F172A;            /* slate-900 — `modalSurface` */
+        --sunken:  #131C31;            /* ~ `bg-white/[0.04]` sobre slate-900 */
+        --ink:     #E8EAF0;            /* ~ text-white/90 */
+        --muted:   #9BA3B4;            /* ~ text-white/60 */
+        --faint:   #6B7385;            /* ~ text-white/35 */
+        --rule:    #232B3D;            /* ~ border-white/10 */
+        --rule-2:  #1A2233;
+
+        /* Dessaturado de propósito: indigo-500 puro sobre fundo escuro fica
+           elétrico — é a mesma nota do `skillTheme`. */
+        --accent:   #A5B4FC;           /* indigo-300 */
+        --accent-w: #1B2036;
+        --acao:     #262E42;           /* ~ bg-white/[0.12] */
+        --acao-h:   #333C53;           /* ~ hover:bg-white/[0.18] */
+        --acao-ink: #E8EAF0;
+
+        --ok:      #6EE7B7;            /* emerald-300 */
+        --ok-w:    #10241F;
+        --flag:    #FCA5A5;            /* red-300 */
+        --flag-w:  #2A1618;
       }
     }
+
     * { box-sizing: border-box; }
     body {
       margin: 0; background: var(--paper); color: var(--ink);
-      font-family: var(--sans); font-size: 16px; line-height: 1.6;
+      font-family: var(--sans); font-size: 15px; line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
     .wrap { max-width: 46rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+
+    /* Cabeçalho: régua fina como as divisórias do chat, não a barra grossa de
+       antes — o peso ali disputava atenção com o título da página. */
     header.topo {
-      display: flex; justify-content: space-between; align-items: baseline;
+      display: flex; justify-content: space-between; align-items: center;
       gap: 1rem; flex-wrap: wrap;
-      border-bottom: 2px solid var(--ink); padding-bottom: .7rem; margin-bottom: 2rem;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: .9rem; margin-bottom: 2rem;
     }
-    .marca { font-weight: 650; letter-spacing: -.01em; }
-    .quem { font-family: var(--mono); font-size: .74rem; color: var(--muted); text-align: right; }
-    h1 { font-size: 1.6rem; line-height: 1.2; margin: 0 0 .6rem; letter-spacing: -.015em; }
-    h2 { font-size: 1.05rem; margin: 0 0 .5rem; }
+    .marca {
+      display: inline-flex; align-items: center; gap: .55rem;
+      font-weight: 600; letter-spacing: -.01em; font-size: .95rem;
+    }
+    /* O losango indigo faz as vezes do ícone de tema do chat: o ponto de cor da
+       identidade, pequeno e fora do texto. */
+    .marca::before {
+      content: ""; width: .55rem; height: .55rem; flex: none;
+      background: var(--accent); border-radius: 2px; transform: rotate(45deg);
+    }
+    .quem { font-size: .76rem; color: var(--muted); text-align: right; line-height: 1.45; }
+
+    h1 { font-size: 1.5rem; line-height: 1.25; margin: 0 0 .6rem; letter-spacing: -.02em; }
+    h2 { font-size: 1rem; margin: 0 0 .5rem; letter-spacing: -.01em; }
     p { margin: 0 0 .9rem; max-width: 62ch; }
     .lead { color: var(--muted); }
-    a { color: var(--accent); }
-    code { font-family: var(--mono); font-size: .86em; background: var(--rule-2);
-           border: 1px solid var(--rule); border-radius: 3px; padding: .05em .3em; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+    code {
+      font-family: var(--mono); font-size: .86em; background: var(--rule-2);
+      border: 1px solid var(--rule); border-radius: 4px; padding: .05em .32em;
+    }
 
     .card {
-      background: var(--card); border: 1px solid var(--rule); border-radius: 3px;
-      padding: 1.3rem; margin: 0 0 1.25rem;
+      background: var(--card); border: 1px solid var(--rule);
+      border-radius: var(--r-card); padding: 1.35rem; margin: 0 0 1.25rem;
     }
+    /* Faixa vertical à esquerda — o mesmo recurso do card de tema no chat:
+       marca a origem sem tingir a área de leitura. */
     .card.destaque { border-left: 3px solid var(--accent); }
 
-    label { display: block; font-weight: 600; font-size: .9rem; margin: 0 0 .3rem; }
-    .dica { font-size: .82rem; color: var(--muted); margin: .25rem 0 0; }
+    label { display: block; font-weight: 600; font-size: .875rem; margin: 0 0 .35rem; }
+    .dica { font-size: .8rem; color: var(--muted); margin: .3rem 0 0; }
     input[type=text], input[type=file] {
-      width: 100%; padding: .6rem .7rem; font: inherit; font-size: .95rem;
-      color: var(--ink); background: var(--paper);
-      border: 1px solid var(--rule); border-radius: 3px;
+      width: 100%; padding: .6rem .7rem; font: inherit; font-size: .9rem;
+      color: var(--ink); background: var(--sunken);
+      border: 1px solid var(--rule); border-radius: var(--r-ctrl);
     }
+    input[type=text]:focus { border-color: var(--accent); }
     input:focus-visible, button:focus-visible, a:focus-visible {
       outline: 2px solid var(--accent); outline-offset: 2px;
     }
     .campo { margin: 0 0 1.1rem; }
+
     button, .botao {
-      display: inline-block; font: inherit; font-weight: 600; font-size: .95rem;
-      padding: .65rem 1.2rem; border-radius: 3px; cursor: pointer;
-      background: var(--accent); color: var(--paper); border: 1px solid var(--accent);
-      text-decoration: none;
+      display: inline-flex; align-items: center; gap: .4rem;
+      font: inherit; font-weight: 500; font-size: .875rem;
+      padding: .6rem 1.1rem; border-radius: var(--r-ctrl); cursor: pointer;
+      background: var(--acao); color: var(--acao-ink);
+      border: 1px solid transparent; text-decoration: none;
+      transition: background-color .15s ease;
     }
-    .botao.leve { background: transparent; color: var(--accent); }
-    button[disabled] { opacity: .55; cursor: progress; }
-    .acoes { display: flex; gap: .7rem; align-items: center; flex-wrap: wrap; }
+    button:hover, .botao:hover { background: var(--acao-h); }
+    .botao.leve {
+      background: transparent; color: var(--muted); border-color: var(--rule);
+    }
+    .botao.leve:hover { background: var(--rule-2); color: var(--ink); }
+    button[disabled] { opacity: .5; cursor: progress; }
+    .acoes { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
 
     .aviso, .erro, .ok {
-      border-radius: 3px; padding: .9rem 1.05rem; margin: 0 0 1.25rem;
-      font-size: .93rem; border: 1px solid;
+      border-radius: var(--r-card); padding: .9rem 1.05rem; margin: 0 0 1.25rem;
+      font-size: .89rem; border: 1px solid;
     }
-    .erro  { background: var(--flag-w);   border-color: var(--flag);   color: var(--ink); }
-    .ok    { background: var(--accent-w); border-color: var(--accent); color: var(--ink); }
-    .aviso { background: var(--rule-2);   border-color: var(--rule);   color: var(--ink); }
+    .erro  { background: var(--flag-w);  border-color: var(--flag);  color: var(--ink); }
+    .ok    { background: var(--ok-w);    border-color: var(--ok);    color: var(--ink); }
+    .aviso { background: var(--rule-2);  border-color: var(--rule);  color: var(--ink); }
     .aviso ul { margin: .5rem 0 0; padding-left: 1.2rem; }
     .aviso li { margin: .2rem 0; }
 
-    table { border-collapse: collapse; width: 100%; font-size: .9rem; }
-    th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); }
-    th { font-family: var(--mono); font-size: .7rem; text-transform: uppercase;
-         letter-spacing: .07em; color: var(--muted); font-weight: 500; }
+    table { border-collapse: collapse; width: 100%; font-size: .875rem; }
+    th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--rule); }
+    th {
+      font-size: .68rem; text-transform: uppercase; letter-spacing: .06em;
+      color: var(--faint); font-weight: 600;
+    }
+    /* `tabular-nums` para as colunas de preço alinharem na vírgula. */
     td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
     .rolagem { overflow-x: auto; }
 
-    footer { margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--rule);
-             font-size: .78rem; color: var(--muted); font-family: var(--mono); }
+    footer {
+      margin-top: 2.5rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+      font-size: .78rem; color: var(--faint);
+    }
+    footer a { color: var(--muted); }
   </style>
 </head>
 <body>
